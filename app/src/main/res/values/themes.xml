@@ -1,0 +1,8 @@
+<resources>
+    <style name="Theme.WifiTracker" parent="android:Theme.Material.NoActionBar">
+        <item name="android:windowBackground">#0E0F13</item>
+        <item name="android:statusBarColor">#0E0F13</item>
+        <item name="android:navigationBarColor">#0E0F13</item>
+        <item name="android:windowLightStatusBar">false</item>
+    </style>
+</resources>
