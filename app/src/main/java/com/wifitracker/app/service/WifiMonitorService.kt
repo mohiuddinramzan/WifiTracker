@@ -14,6 +14,7 @@ import android.os.Build
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
 import com.wifitracker.app.MainActivity
+import com.wifitracker.app.R
 import com.wifitracker.app.WifiTrackerApp
 import com.wifitracker.app.data.WifiSession
 import kotlinx.coroutines.CoroutineScope
@@ -119,10 +120,10 @@ class WifiMonitorService : Service() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
                 CHANNEL_ID,
-                "WiFi মনিটরিং",
+                getString(R.string.notification_channel_name),
                 NotificationManager.IMPORTANCE_MIN
             ).apply {
-                description = "WiFi সংযোগের সময় ট্র্যাক করার জন্য ব্যাকগ্রাউন্ড সার্ভিস"
+                description = getString(R.string.notification_channel_desc)
                 setShowBadge(false)
             }
             val manager = getSystemService(NotificationManager::class.java)
@@ -136,8 +137,8 @@ class WifiMonitorService : Service() {
             android.app.PendingIntent.FLAG_IMMUTABLE
         )
         return NotificationCompat.Builder(this, CHANNEL_ID)
-            .setContentTitle("WiFi সময় ট্র্যাক হচ্ছে")
-            .setContentText("আপনার WiFi সংযোগের সময় হিসাব করা হচ্ছে")
+            .setContentTitle(getString(R.string.notification_title))
+            .setContentText(getString(R.string.notification_text))
             .setSmallIcon(android.R.drawable.stat_sys_data_bluetooth)
             .setContentIntent(pendingIntent)
             .setPriority(NotificationCompat.PRIORITY_MIN)

@@ -30,7 +30,7 @@ class MainActivity : ComponentActivity() {
 
         val app = application as WifiTrackerApp
         val repository = StatsRepository(app.database.wifiSessionDao())
-        val factory = MainViewModelFactory(repository)
+        val factory = MainViewModelFactory(app, repository)
 
         setContent {
             WifiTrackerTheme {

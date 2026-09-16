@@ -1,7 +1,9 @@
 package com.wifitracker.app.ui
 
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.wifitracker.app.R
 import com.wifitracker.app.data.PeriodStat
 import com.wifitracker.app.data.StatsRepository
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -10,12 +12,12 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import java.util.Calendar
 
-enum class Period(val label: String) {
-    DAILY("দৈনিক"),
-    WEEKLY("সাপ্তাহিক"),
-    MONTHLY("মাসিক"),
-    YEARLY("বাৎসরিক"),
-    ALL_TIME("সবগুলো")
+enum class Period(val labelRes: Int) {
+    DAILY(R.string.period_daily),
+    WEEKLY(R.string.period_weekly),
+    MONTHLY(R.string.period_monthly),
+    YEARLY(R.string.period_yearly),
+    ALL_TIME(R.string.period_all_time)
 }
 
 data class UiState(
@@ -27,7 +29,10 @@ data class UiState(
     val loading: Boolean = true
 )
 
-class MainViewModel(private val repository: StatsRepository) : ViewModel() {
+class MainViewModel(
+    application: Application,
+    private val repository: StatsRepository
+) : AndroidViewModel(application) {
 
     private val _uiState = MutableStateFlow(UiState())
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
@@ -60,7 +65,9 @@ class MainViewModel(private val repository: StatsRepository) : ViewModel() {
                     val (start, end) = repository.weekBounds(now)
                     val total = repository.getConnectedDuration(start, end)
                     val bars = repository.lastNWeeks(8)
-                    val labels = bars.mapIndexed { i, _ -> "সপ্তাহ ${i + 1}" }
+                    val labels = bars.mapIndexed { i, _ ->
+                        getApplication<Application>().getString(R.string.week_label, i + 1)
+                    }
                     emit(period, total, end - start, bars, labels)
                 }
                 Period.MONTHLY -> {
@@ -107,7 +114,7 @@ class MainViewModel(private val repository: StatsRepository) : ViewModel() {
     }
 
     private fun last7DayLabels(): List<String> {
-        val names = listOf("রবি", "সোম", "মঙ্গল", "বুধ", "বৃহঃ", "শুক্র", "শনি")
+        val names = getApplication<Application>().resources.getStringArray(R.array.day_names_short)
         val cal = Calendar.getInstance()
         val result = mutableListOf<String>()
         for (i in 6 downTo 0) {
@@ -119,10 +126,7 @@ class MainViewModel(private val repository: StatsRepository) : ViewModel() {
     }
 
     private fun last12MonthLabels(): List<String> {
-        val names = listOf(
-            "জানু", "ফেব্রু", "মার্চ", "এপ্রি", "মে", "জুন",
-            "জুলা", "আগ", "সেপ্টে", "অক্টো", "নভে", "ডিসে"
-        )
+        val names = getApplication<Application>().resources.getStringArray(R.array.month_names_short)
         val cal = Calendar.getInstance()
         val result = mutableListOf<String>()
         for (i in 11 downTo 0) {
@@ -139,10 +143,12 @@ class MainViewModel(private val repository: StatsRepository) : ViewModel() {
     }
 }
 
-class MainViewModelFactory(private val repository: StatsRepository) :
-    androidx.lifecycle.ViewModelProvider.Factory {
+class MainViewModelFactory(
+    private val application: Application,
+    private val repository: StatsRepository
+) : androidx.lifecycle.ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
     override fun <T : androidx.lifecycle.ViewModel> create(modelClass: Class<T>): T {
-        return MainViewModel(repository) as T
+        return MainViewModel(application, repository) as T
     }
 }

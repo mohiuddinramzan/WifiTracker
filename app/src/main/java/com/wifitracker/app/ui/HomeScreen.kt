@@ -23,9 +23,11 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.wifitracker.app.R
 import com.wifitracker.app.ui.components.WifiBarChart
 import com.wifitracker.app.ui.components.WifiRingProgress
 import java.util.concurrent.TimeUnit
@@ -45,13 +47,13 @@ fun HomeScreen(viewModel: MainViewModel) {
             item {
                 Column(modifier = Modifier.padding(20.dp)) {
                     Text(
-                        text = "WiFi সংযোগের সময়",
+                        text = stringResource(R.string.home_title),
                         fontSize = 22.sp,
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.onBackground
                     )
                     Text(
-                        text = "আপনার ডিভাইস কতক্ষণ WiFi এর সাথে সংযুক্ত ছিল, তার হিসাব",
+                        text = stringResource(R.string.home_subtitle),
                         fontSize = 13.sp,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         modifier = Modifier.padding(top = 4.dp)
@@ -71,7 +73,7 @@ fun HomeScreen(viewModel: MainViewModel) {
                         Tab(
                             selected = state.period == period,
                             onClick = { viewModel.selectPeriod(period) },
-                            text = { Text(period.label, fontSize = 12.sp) }
+                            text = { Text(stringResource(period.labelRes), fontSize = 12.sp) }
                         )
                     }
                 }
@@ -94,7 +96,7 @@ fun HomeScreen(viewModel: MainViewModel) {
                         WifiRingProgress(
                             progress = percent,
                             centerLine1 = formatDuration(state.totalDurationMillis),
-                            centerLine2 = "${(percent * 100).toInt()}% সংযুক্ত ছিল",
+                            centerLine2 = stringResource(R.string.percent_connected, (percent * 100).toInt()),
                             modifier = Modifier.padding(vertical = 16.dp)
                         )
                     }
@@ -105,7 +107,7 @@ fun HomeScreen(viewModel: MainViewModel) {
                 item {
                     Column(modifier = Modifier.padding(20.dp)) {
                         Text(
-                            text = "সাম্প্রতিক প্রবণতা",
+                            text = stringResource(R.string.recent_trend),
                             fontSize = 15.sp,
                             fontWeight = FontWeight.SemiBold,
                             color = MaterialTheme.colorScheme.onBackground,
@@ -128,7 +130,7 @@ fun HomeScreen(viewModel: MainViewModel) {
                 item {
                     Column(modifier = Modifier.padding(horizontal = 20.dp)) {
                         Text(
-                            text = "বিস্তারিত তালিকা",
+                            text = stringResource(R.string.detailed_list),
                             fontSize = 15.sp,
                             fontWeight = FontWeight.SemiBold,
                             color = MaterialTheme.colorScheme.onBackground,
@@ -172,8 +174,13 @@ fun HomeScreen(viewModel: MainViewModel) {
     }
 }
 
+@Composable
 fun formatDuration(millis: Long): String {
     val hours = TimeUnit.MILLISECONDS.toHours(millis)
     val minutes = TimeUnit.MILLISECONDS.toMinutes(millis) % 60
-    return if (hours > 0) "${hours} ঘন্টা ${minutes} মিনিট" else "${minutes} মিনিট"
+    return if (hours > 0) {
+        stringResource(R.string.duration_hours_minutes, hours, minutes)
+    } else {
+        stringResource(R.string.duration_minutes, minutes)
+    }
 }

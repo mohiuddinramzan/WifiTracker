@@ -1,3 +1,49 @@
 <resources>
     <string name="app_name">WiFi সময়</string>
+
+    <string name="home_title">WiFi সংযোগের সময়</string>
+    <string name="home_subtitle">আপনার ডিভাইস কতক্ষণ WiFi এর সাথে সংযুক্ত ছিল, তার হিসাব</string>
+    <string name="percent_connected">%1$d%% সংযুক্ত ছিল</string>
+    <string name="recent_trend">সাম্প্রতিক প্রবণতা</string>
+    <string name="detailed_list">বিস্তারিত তালিকা</string>
+
+    <string name="period_daily">দৈনিক</string>
+    <string name="period_weekly">সাপ্তাহিক</string>
+    <string name="period_monthly">মাসিক</string>
+    <string name="period_yearly">বাৎসরিক</string>
+    <string name="period_all_time">সবগুলো</string>
+
+    <string name="week_label">সপ্তাহ %1$d</string>
+    <string name="duration_hours_minutes">%1$d ঘন্টা %2$d মিনিট</string>
+    <string name="duration_minutes">%1$d মিনিট</string>
+
+    <string-array name="day_names_short">
+        <item>রবি</item>
+        <item>সোম</item>
+        <item>মঙ্গল</item>
+        <item>বুধ</item>
+        <item>বৃহঃ</item>
+        <item>শুক্র</item>
+        <item>শনি</item>
+    </string-array>
+
+    <string-array name="month_names_short">
+        <item>জানু</item>
+        <item>ফেব্রু</item>
+        <item>মার্চ</item>
+        <item>এপ্রি</item>
+        <item>মে</item>
+        <item>জুন</item>
+        <item>জুলা</item>
+        <item>আগ</item>
+        <item>সেপ্টে</item>
+        <item>অক্টো</item>
+        <item>নভে</item>
+        <item>ডিসে</item>
+    </string-array>
+
+    <string name="notification_channel_name">WiFi মনিটরিং</string>
+    <string name="notification_channel_desc">WiFi সংযোগের সময় ট্র্যাক করার জন্য ব্যাকগ্রাউন্ড সার্ভিস</string>
+    <string name="notification_title">WiFi সময় ট্র্যাক হচ্ছে</string>
+    <string name="notification_text">আপনার WiFi সংযোগের সময় হিসাব করা হচ্ছে</string>
 </resources>
