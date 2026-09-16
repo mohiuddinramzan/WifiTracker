@@ -7,6 +7,9 @@ on:
     branches: [ "main" ]
   workflow_dispatch: {}
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -39,3 +42,14 @@ jobs:
         with:
           name: wifi-tracker-debug-apk
           path: app/build/outputs/apk/debug/app-debug.apk
+
+      - name: Rename APK with build number
+        run: cp app/build/outputs/apk/debug/app-debug.apk app/build/outputs/apk/debug/WifiTracker-v${{ github.run_number }}.apk
+
+      - name: Create GitHub Release
+        if: github.event_name == 'push'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ github.run_number }}
+          name: WiFi Time Tracker v${{ github.run_number }}
+          files: app/build/outputs/apk/debug/WifiTracker-v${{ github.run_number }}.apk
